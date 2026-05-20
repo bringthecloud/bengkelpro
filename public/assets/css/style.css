@@ -1873,10 +1873,6 @@ select option {
 /* =====================================================
    PRINT STYLES
    ===================================================== */
-.no-print {
-    /* visible on screen */
-}
-
 @media print {
     /* Hide all navigation and UI chrome */
     .sidebar, .topbar, .hero-section, .sidebar-overlay,
