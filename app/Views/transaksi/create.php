@@ -36,7 +36,7 @@
 
         <div class="form-group">
             <label>Keluhan</label>
-            <textarea name="Keluhan" rows="3" placeholder="Jelaskan masalah kendaraan..." required></textarea>
+            <textarea name="Keluhan" rows="3" placeholder="Jelaskan masalah kendaraan (opsional)..."></textarea>
         </div>
 
         <!-- DAFTAR SERVIS -->

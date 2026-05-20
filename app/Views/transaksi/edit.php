@@ -37,7 +37,7 @@
 
         <div class="form-group">
             <label>Keluhan</label>
-            <textarea name="Keluhan" rows="3" placeholder="Jelaskan masalah kendaraan..." required><?= esc($trans['Keluhan']) ?></textarea>
+            <textarea name="Keluhan" rows="3" placeholder="Jelaskan masalah kendaraan (opsional)..."><?= esc($trans['Keluhan']) ?></textarea>
         </div>
 
         <!-- DAFTAR SERVIS -->
