@@ -207,6 +207,7 @@
     });
 })();
 </script>
+<script src="<?= base_url('assets/js/app.js') ?>" defer></script>
 <?php else: ?>
     <?= $this->renderSection('content') ?>
 <?php endif; ?>
