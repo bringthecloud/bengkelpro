@@ -17,17 +17,20 @@ class Jasa extends BaseController {
         return view('master/jasa_list', $data);
     }
 
-    public function new() { 
+    public function new() {
+        if (session()->get('role') !== 'admin') return redirect()->to('/jasa')->with('error', 'Anda tidak memiliki akses.');
         return view('master/jasa_form', ['title'=>'Tambah Jasa']); 
     }
 
     public function create() {
+        if (session()->get('role') !== 'admin') return redirect()->to('/jasa')->with('error', 'Anda tidak memiliki akses.');
         $this->model->insert($this->request->getPost());
         (new NotifikasiModel())->insert(['pesan' => 'Jasa "' . $this->request->getPost('Nama_Jasa') . '" ditambahkan', 'tipe' => 'success', 'icon' => 'bx-wrench']);
         return redirect()->to('/jasa')->with('success', 'Jasa berhasil ditambah');
     }
 
     public function edit($id = null) {
+        if (session()->get('role') !== 'admin') return redirect()->to('/jasa')->with('error', 'Anda tidak memiliki akses.');
         $data['title'] = 'Edit Jasa';
         $data['item'] = $this->model->find($id);
         if (!$data['item']) return redirect()->to('/jasa');
@@ -36,12 +39,14 @@ class Jasa extends BaseController {
     }
 
     public function update($id = null) {
+        if (session()->get('role') !== 'admin') return redirect()->to('/jasa')->with('error', 'Anda tidak memiliki akses.');
         $this->model->update($id, $this->request->getPost());
         (new NotifikasiModel())->insert(['pesan' => 'Jasa "' . $this->request->getPost('Nama_Jasa') . '" diperbarui', 'tipe' => 'info', 'icon' => 'bx-edit']);
         return redirect()->to('/jasa')->with('success', 'Jasa diupdate');
     }
 
     public function delete($id = null) {
+        if (session()->get('role') !== 'admin') return redirect()->to('/jasa')->with('error', 'Anda tidak memiliki akses.');
         $item = $this->model->find($id);
         $this->model->delete($id);
         (new NotifikasiModel())->insert(['pesan' => 'Jasa "' . ($item['Nama_Jasa'] ?? '') . '" dihapus', 'tipe' => 'danger', 'icon' => 'bx-trash']);

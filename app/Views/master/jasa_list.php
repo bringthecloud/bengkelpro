@@ -4,7 +4,9 @@
 
 <div class="page-header">
     <h3 class="section-title"><i class='bx bx-wrench'></i> Data Jasa Service</h3>
+    <?php if(session()->get('role') === 'admin'): ?>
     <a href="/jasa/new" class="btn btn-primary"><i class='bx bx-plus'></i> Tambah Jasa</a>
+    <?php endif; ?>
 </div>
 
 <div class="search-bar" style="margin-bottom:20px;">
@@ -37,10 +39,14 @@
                     <td style="color:var(--text-main); font-weight:500;"><?= $item['Nama_Jasa'] ?? '-' ?></td>
                     <td style="color:var(--primary-red); font-weight:600;">Rp <?= number_format($item['Harga_Satuan'] ?? 0, 0, ',', '.') ?></td>
                     <td>
+                        <?php if(session()->get('role') === 'admin'): ?>
                         <div class="action-group">
                             <a href="/jasa/edit/<?= $item['ID_Jasa'] ?>" class="btn btn-secondary btn-sm"><i class='bx bx-edit'></i> Edit</a>
                             <a href="/jasa/delete/<?= $item['ID_Jasa'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')"><i class='bx bx-trash'></i> Hapus</a>
                         </div>
+                        <?php else: ?>
+                        <span style="color:var(--text-muted); font-size:13px;">View only</span>
+                        <?php endif; ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>

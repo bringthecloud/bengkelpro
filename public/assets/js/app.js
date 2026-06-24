@@ -135,7 +135,7 @@
 
         // Intercept all delete links
         document.addEventListener('click', function (e) {
-            const deleteLink = e.target.closest('a[onclick*="confirm"]');
+            const deleteLink = e.target.closest('a.btn-danger[onclick*="confirm"]');
             if (!deleteLink) return;
 
             e.preventDefault();
@@ -279,16 +279,21 @@
 
             const href = link.getAttribute('href');
 
-            // Skip: external links, anchors, javascript:, logout, delete, new tab
+            // Skip: external links, anchors, javascript:, logout, delete, bayar, new tab
             if (!href ||
                 href.startsWith('#') ||
                 href.startsWith('javascript:') ||
                 href.includes('delete') ||
                 href.includes('logout') ||
+                href.includes('bayar') ||
                 link.target === '_blank' ||
+                link.hasAttribute('onclick') ||
                 e.ctrlKey || e.metaKey) {
                 return;
             }
+
+            // Skip if default was already prevented (e.g. by confirm() Cancel)
+            if (e.defaultPrevented) return;
 
             // Skip same-page links
             if (href === window.location.pathname) return;

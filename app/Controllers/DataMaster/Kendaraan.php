@@ -52,7 +52,7 @@ class Kendaraan extends BaseController {
     public function delete($id = null) {
         $item = $this->kendaraanModel->find($id);
         $this->kendaraanModel->delete($id);
-        (new NotifikasiModel())->insert(['pesan' => 'Kendaraan "' . ($item['No_Plat'] ?? '') . '" dihapus', 'tipe' => 'danger', 'icon' => 'bx-trash']);
+        (new NotifikasiModel())->insert(['pesan' => 'Kendaraan "' . ($item['No_Polisi'] ?? '') . '" dihapus', 'tipe' => 'danger', 'icon' => 'bx-trash']);
         return redirect()->to('/kendaraan')->with('success', 'Kendaraan dihapus');
     }
 }

@@ -76,6 +76,22 @@ class Transaksi extends BaseController {
         // Save detail sparepart + kurangi stok
         $detSparepart = new DetailSparepartModel();
         $sparepartModel = new SparepartModel();
+
+        // Validasi stok dulu sebelum proses
+        foreach ($sparepartIds as $i => $spId) {
+            if (!empty($spId)) {
+                $jml = (int)($sparepartJml[$i] ?? 1);
+                $sp = $sparepartModel->find($spId);
+                if (!$sp || $sp['Stok_Barang'] < $jml) {
+                    // Hapus transaksi yang sudah dibuat & detail servis
+                    $db = \Config\Database::connect();
+                    $db->query("DELETE FROM detail_servis WHERE ID_Transaksi = ?", [$transId]);
+                    $this->transModel->delete($transId);
+                    return redirect()->back()->with('error', 'Stok sparepart "' . ($sp['Nama_Barang'] ?? '') . '" tidak mencukupi (sisa: ' . ($sp['Stok_Barang'] ?? 0) . ').');
+                }
+            }
+        }
+
         foreach ($sparepartIds as $i => $spId) {
             if (!empty($spId)) {
                 $jml = (int)($sparepartJml[$i] ?? 1);
@@ -209,6 +225,19 @@ class Transaksi extends BaseController {
 
         // Simpan detail sparepart baru + kurangi stok
         $detSparepart = new DetailSparepartModel();
+        $sparepartModel = new SparepartModel();
+
+        // Validasi stok dulu sebelum proses
+        foreach ($sparepartIds as $i => $spId) {
+            if (!empty($spId)) {
+                $jml = (int)($sparepartJml[$i] ?? 1);
+                $sp = $sparepartModel->find($spId);
+                if (!$sp || $sp['Stok_Barang'] < $jml) {
+                    return redirect()->back()->with('error', 'Stok sparepart "' . ($sp['Nama_Barang'] ?? '') . '" tidak mencukupi (sisa: ' . ($sp['Stok_Barang'] ?? 0) . ').');
+                }
+            }
+        }
+
         foreach ($sparepartIds as $i => $spId) {
             if (!empty($spId)) {
                 $jml = (int)($sparepartJml[$i] ?? 1);
@@ -232,6 +261,13 @@ class Transaksi extends BaseController {
     }
 
     public function bayar($id) {
+        $trans = $this->transModel->find($id);
+        if (!$trans) {
+            return redirect()->to('/transaksi')->with('error', 'Transaksi tidak ditemukan.');
+        }
+        if (($trans['Status_Bayar'] ?? '') === 'Lunas') {
+            return redirect()->to('/transaksi/' . $id)->with('error', 'Transaksi sudah lunas.');
+        }
         $this->transModel->update($id, ['Status_Bayar' => 'Lunas']);
         (new NotifikasiModel())->insert(['pesan' => 'Transaksi #' . $id . ' ditandai lunas', 'tipe' => 'success', 'icon' => 'bx-check-circle']);
         return redirect()->to('/transaksi/' . $id)->with('success', 'Pembayaran berhasil!');

@@ -38,7 +38,7 @@
                     <td style="color:var(--primary-red); font-weight:600;">#<?= $t['ID_Transaksi'] ?></td>
                     <td style="font-weight:500;"><?= $t['Nama_Lengkap'] ?? '-' ?></td>
                     <td><?= ($t['No_Polisi'] ?? '-') . ' — ' . ($t['Merk'] ?? '') ?></td>
-                    <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"><?= $t['Keluhan'] ?></td>
+                    <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"><?= esc($t['Keluhan']) ?></td>
                     <td style="font-weight:600;">Rp <?= number_format($t['Total_Harga'] ?? 0, 0, ',', '.') ?></td>
                     <td>
                         <?php
